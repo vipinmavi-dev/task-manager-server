@@ -1,17 +1,18 @@
-const express = require('express');
+import express, 
+{ type Request, type Response, type NextFunction} from 'express';
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', (req: Request, res, Response) => {
     res.send("All task fetch route");
 });
-router.post('/', (req, res) => {
+router.post('/', (req: Request, res, Response) => {
     res.send("Add task route");
 });  
-router.put('/:id', (req, res) => {
+router.put('/:id', (req: Request, res, Response) => {
     res.send("Update task route");
 });
-router.delete('/:id', (req, res) => {
+router.delete('/:id', (req: Request, res, Response) => {
     res.send("Delete task route");
 });
 
-module.exports = router;
+export default router;
