@@ -9,7 +9,6 @@ router.post('/logout', (req: Request, res: Response)  => {
     res.send("Logout route");
 });
 router.post('/signup', (req: Request, res: Response)  => {
-    
     res.send("Create account route");
 });
 router.post('/forgot-password', (req: Request, res: Response)  => {
