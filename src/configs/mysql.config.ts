@@ -12,8 +12,8 @@ const dbConfig = {
     connectionLimit: 10,
     queueLimit: 0,
 }
-console.log(process.env.DB_PORT,"/////////////// Vipin /////////////////////");
-// const dbConfig = "mysql://root:India%40123@localhost:3306/task_manager";
+
+// const dbConfig = process.env.DB_URI;
 
 const pool = mysql.createPool(dbConfig);
 const testConnection = async () => {
