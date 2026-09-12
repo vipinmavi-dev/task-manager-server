@@ -2,6 +2,7 @@ import 'dotenv/config';
 
 import express from 'express';
 const app = express();
+import cookieParser from 'cookie-parser';
 import taskRoutes from './routes/task.routes.js';
 import authRoutes from './routes/auth.routes.js';
 
@@ -18,6 +19,7 @@ import AuthType from './models/AuthTypes.model.js';
   }
 })();
 
+app.use(cookieParser());
 app.use(express.json()); // If Request body contain JSON data then parse
 app.use('/api/tasks', taskRoutes);
 app.use('/api/auth', authRoutes);
