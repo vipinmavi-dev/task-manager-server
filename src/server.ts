@@ -7,10 +7,11 @@ import authRoutes from './routes/auth.routes.js';
 
 import sequelize from './configs/sequalize.js';
 import User from './models/Users.model.js';
-import AuthType from './models/authTypes.model.js';
+import AuthType from './models/AuthTypes.model.js';
 (async () => {
   try {
-    await sequelize.sync({ alter: true }); // good for development
+    // await sequelize.sync({ alter: true }); // good for development
+    await sequelize.sync(); // good for development
     console.log('All models were synchronized successfully.');
   } catch (error) {
     console.error('Error syncing models:', error);
