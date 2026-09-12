@@ -1,26 +1,89 @@
-import express, {type Request, type Response, type Router} from 'express';
+import express, { type Request, type Response, type Router } from 'express';
 const router: Router = express.Router();
 import User from '../models/Users.model.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
-router.post('/login', async (req: Request, res: Response)  => {
-    res.send("Login route");
+router.post('/login', async (req: Request, res: Response) => {
+    const userCredential: Readonly<{ email: string, password: string }> = req.body;
+    // Check if user exists
+    const resFindOne = await User.findOne({ where: { email: userCredential.email } });
+    if (!resFindOne) {
+        return res.status(404).json({
+            success: false,
+            message: 'Invalid email or password',
+            data: null
+        });
+    }
+
+    const {created_at, updated_at, password, auth_type_id, id, last_active_at, ...user} = resFindOne.toJSON();
+    // Check if password matches
+    const userCheck: boolean = await bcrypt.compare(userCredential.password, password);
+    
+    if (!userCheck) {
+        return res.status(404).json({
+            success: false,
+            message: 'Invalid email or password',
+            data: null
+        });
+    }
+
+    // Create JWT token and send it in response
+    const token = jwt.sign({ id: id, email: user.email }, process.env.JWT_SECRET as string, { expiresIn: '1d' });
+    
+    // Send the token in cookie
+    res.cookie('token', token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+      });
+
+    res.status(200).json({
+        success: true,
+        message: 'User logged in successfully',
+        data: user
+    });
 });
-router.post('/logout', (req: Request, res: Response)  => {
+router.post('/logout', (req: Request, res: Response) => {
+    const token = req.cookies.token;
+    console.log(token);
+    if(!token){
+        res.status(401).json({
+            success: false,
+            message: 'No token found',
+            data: null
+        });
+    }
+    try {
+        jwt.verify(token, process.env.JWT_SECRET as string);
+        res.clearCookie('token');
+        res.status(200).json({
+            success: true,
+            message: 'User logged out successfully',
+            data: null
+        });
+    } catch (error) {
+        res.status(401).json({
+            success: false,
+            message: 'Invalid token',
+            data: null
+        });
+    }
+    
     res.send("Logout route");
 });
-router.post('/signup', async (req: Request, res: Response)  => {
-    const userData = req.body;
+router.post('/signup', async (req: Request, res: Response) => {
+    const userData: Readonly<{ name: string, email: string, password: string }> = req.body;
 
-    const hashPassword = await bcrypt.hash(userData.password, 13);
+    const hashPassword: string = await bcrypt.hash(userData.password, 13);
 
-    const customizeUserData: Readonly<typeof userData> = {
+    const customUserData: Readonly<{ name: string, email: string, password: string, auth_type_id: number }> = {
         ...userData,
         password: hashPassword,
         auth_type_id: 1
     }
     try {
-        const createdUser = await User.create(customizeUserData);
+        const createdUser = await User.create(customUserData);
         const {
             password,
             auth_type_id,
@@ -30,22 +93,23 @@ router.post('/signup', async (req: Request, res: Response)  => {
         res.status(200).json({
             success: true,
             message: 'User created successfully',
-            data : userResponse
+            data: userResponse
         });
     } catch (error) {
-        res.status(500).json({ 
+        res.status(500).json({
             success: false,
-            message: 'Failed to create user', 
-            data: error });
+            message: 'Failed to create user',
+            data: error
+        });
     }
 });
-router.post('/forgot-password', (req: Request, res: Response)  => {
+router.post('/forgot-password', (req: Request, res: Response) => {
     res.send("Send mail/OTP. Forgot password route");
 });
-router.post('/reset-password', (req: Request, res: Response)  => {
+router.post('/reset-password', (req: Request, res: Response) => {
     res.send("reset password route");
 });
-router.get('/me', (req: Request, res: Response)  => {
+router.get('/me', (req: Request, res: Response) => {
     res.send("Get Current User Profile route");
 });
 
