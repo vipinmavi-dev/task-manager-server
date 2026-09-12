@@ -69,8 +69,6 @@ router.post('/logout', (req: Request, res: Response) => {
             data: null
         });
     }
-    
-    res.send("Logout route");
 });
 router.post('/signup', async (req: Request, res: Response) => {
     const userData: Readonly<{ name: string, email: string, password: string }> = req.body;
