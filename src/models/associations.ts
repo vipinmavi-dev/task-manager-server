@@ -1,5 +1,5 @@
 import User from './Users.model.js';
-import AuthType from './authTypes.model.js';
+import AuthType from './AuthTypes.model.js';
 
 User.belongsTo(AuthType, {
   foreignKey: 'auth_type_id',
