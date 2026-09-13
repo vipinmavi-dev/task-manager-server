@@ -9,7 +9,7 @@ router.post('/login', async (req: Request, res: Response) => {
     // Check if user exists
     const resFindOne = await User.findOne({ where: { email: userCredential.email } });
     if (!resFindOne) {
-        return res.status(404).json({
+        return res.status(401).json({
             success: false,
             message: 'Invalid email or password',
             data: null
@@ -21,7 +21,7 @@ router.post('/login', async (req: Request, res: Response) => {
     const userCheck: boolean = await bcrypt.compare(userCredential.password, password);
     
     if (!userCheck) {
-        return res.status(404).json({
+        return res.status(401).json({
             success: false,
             message: 'Invalid email or password',
             data: null
