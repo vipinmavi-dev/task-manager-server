@@ -46,6 +46,7 @@ router.post('/login', async (req: Request, res: Response) => {
 });
 router.post('/logout', (req: Request, res: Response) => {
     const token = req.cookies.token;
+    console.log(token);
     if(!token){
         res.status(401).json({
             success: false,
@@ -68,6 +69,8 @@ router.post('/logout', (req: Request, res: Response) => {
             data: null
         });
     }
+    
+    res.send("Logout route");
 });
 router.post('/signup', async (req: Request, res: Response) => {
     const userData: Readonly<{ name: string, email: string, password: string }> = req.body;
@@ -80,27 +83,18 @@ router.post('/signup', async (req: Request, res: Response) => {
         auth_type_id: 1
     }
     try {
-        const isExist = await User.findOne({ where: { email: customUserData.email } });
-        if(!isExist){
-            const createdUser = await User.create(customUserData);
-            const {
-                password,
-                auth_type_id,
-                updated_at,
-                ...userResponse
-            } = createdUser.toJSON();
-            res.status(200).json({
-                success: true,
-                message: 'User created successfully',
-                data: userResponse
-            });
-        }else{
-            res.status(409).json({
-                success: false,
-                message: 'User already exists',
-                data: null
-            });
-        }
+        const createdUser = await User.create(customUserData);
+        const {
+            password,
+            auth_type_id,
+            updated_at,
+            ...userResponse
+        } = createdUser.toJSON();
+        res.status(200).json({
+            success: true,
+            message: 'User created successfully',
+            data: userResponse
+        });
     } catch (error) {
         res.status(500).json({
             success: false,

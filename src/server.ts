@@ -2,7 +2,6 @@ import 'dotenv/config';
 
 import express from 'express';
 const app = express();
-import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import taskRoutes from './routes/task.routes.js';
 import authRoutes from './routes/auth.routes.js';
@@ -20,12 +19,6 @@ import AuthType from './models/AuthTypes.model.js';
   }
 })();
 
-app.use(
-  cors({
-    origin: 'http://localhost:3000',
-    credentials: true,
-  })
-);
 app.use(cookieParser());
 app.use(express.json()); // If Request body contain JSON data then parse
 app.use('/api/tasks', taskRoutes);
