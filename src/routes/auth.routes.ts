@@ -83,18 +83,27 @@ router.post('/signup', async (req: Request, res: Response) => {
         auth_type_id: 1
     }
     try {
-        const createdUser = await User.create(customUserData);
-        const {
-            password,
-            auth_type_id,
-            updated_at,
-            ...userResponse
-        } = createdUser.toJSON();
-        res.status(200).json({
-            success: true,
-            message: 'User created successfully',
-            data: userResponse
-        });
+        const isExist = await User.findOne({ where: { email: userData.email } });
+        if(!isExist){
+            const createdUser = await User.create(customUserData);
+            const {
+                password,
+                auth_type_id,
+                updated_at,
+                ...userResponse
+            } = createdUser.toJSON();
+            res.status(200).json({
+                success: true,
+                message: 'User created successfully',
+                data: userResponse
+            });
+        }else{
+            res.status(409).json({
+                success: false,
+                message: 'User already exists',
+                data: null
+            });
+        }
     } catch (error) {
         res.status(500).json({
             success: false,
