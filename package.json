@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "server.js",
+  "main": "src/server.ts",
   "scripts": {
+    "start": "node server.task",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/server.ts",
     "postinstall": "prisma skills sync || exit 0"
