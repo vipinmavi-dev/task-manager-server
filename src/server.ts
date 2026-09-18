@@ -1,4 +1,8 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
+
+dotenv.config({
+  path: `.env.${process.env.NODE_ENV}`,
+});
 
 import express from 'express';
 const app = express();
@@ -21,7 +25,7 @@ import AuthType from './models/AuthTypes.model.js';
 })();
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: process.env.CLIENT_URL,
   credentials: true,
 }))
 app.use(cookieParser());
@@ -31,5 +35,5 @@ app.use('/api/auth', authRoutes);
 
 const PORT = process.env.PORT || 1010;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}: ${process.env.NODE_ENV+"/"+process.env.DB_NAME || 'NA'}`);
 });
