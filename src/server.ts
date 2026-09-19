@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 
 dotenv.config({
-  path: `.env.${process.env.NODE_ENV}`,
+  path: `.env.${process.env.NODE_ENV || 'development'}`,
 });
 
 import express from 'express';
@@ -12,8 +12,11 @@ import taskRoutes from './routes/task.routes.js';
 import authRoutes from './routes/auth.routes.js';
 
 import sequelize from './configs/sequalize.js';
+import Task from './models/tasks.model.js';
 import User from './models/Users.model.js';
 import AuthType from './models/AuthTypes.model.js';
+import TaskPriority from './models/taskPriority.model.js';
+import TaskStauses from './models/taskStatus.model.js';
 (async () => {
   try {
     // await sequelize.sync({ alter: true }); // good for development
