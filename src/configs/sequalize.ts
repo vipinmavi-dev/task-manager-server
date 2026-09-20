@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
-
 dotenv.config({
   path: `.env.${process.env.NODE_ENV || 'development'}`,
 });
+
 import { Sequelize } from "sequelize";
 
 const sequelize = new Sequelize(
@@ -22,7 +22,6 @@ const sequelize = new Sequelize(
         }
     }
 );
-console.log(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, process.env.DB_HOST, process.env.DB_PORT);
 // Test connection
 try {
     await sequelize.authenticate();
