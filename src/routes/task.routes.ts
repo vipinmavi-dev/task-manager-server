@@ -1,18 +1,16 @@
-import express, 
-{ type Request, type Response, type NextFunction} from 'express';
+import express, { type Request, type Response, type NextFunction} from 'express';
 const router = express.Router();
+import authUser from '../middlewares/authUser.js';
+import {
+    fatchTasksController,
+    createTaskController,
+    updateTaskController,
+    deleteTaskController
+} from '../controllers/tasks/task.controller.js';
 
-router.get('/', (req: Request, res, Response) => {
-    res.send("All task fetch route");
-});
-router.post('/', (req: Request, res, Response) => {
-    res.send("Add task route");
-});  
-router.put('/:id', (req: Request, res, Response) => {
-    res.send("Update task route");
-});
-router.delete('/:id', (req: Request, res, Response) => {
-    res.send("Delete task route");
-});
+router.get('/tasks', authUser, fatchTasksController);
+router.post('/tasks', authUser, createTaskController);  
+router.put('/tasks/:id', authUser, updateTaskController);
+router.delete('/tasks/:id', authUser, deleteTaskController);
 
 export default router;

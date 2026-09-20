@@ -3,6 +3,7 @@ const router: Router = express.Router();
 import User from '../models/Users.model.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import authUser from '../middlewares/authUser.js';
 
 router.post('/login', async (req: Request, res: Response) => {
     const userCredential: Readonly<{ email: string, password: string }> = req.body;
@@ -29,6 +30,7 @@ router.post('/login', async (req: Request, res: Response) => {
     }
 
     // Create JWT token and send it in response
+    // TODO: This should be moved to a separate function and should be used in other routes as well
     const token = jwt.sign({ id: id, email: user.email }, process.env.JWT_SECRET as string, { expiresIn: '1d' });
     
     // Send the token in cookie
@@ -36,7 +38,7 @@ router.post('/login', async (req: Request, res: Response) => {
         httpOnly: true,
         secure: false,
         sameSite: 'lax',
-      });
+    });
 
     res.status(200).json({
         success: true,
@@ -118,8 +120,23 @@ router.post('/forgot-password', (req: Request, res: Response) => {
 router.post('/reset-password', (req: Request, res: Response) => {
     res.send("reset password route");
 });
-router.get('/me', (req: Request, res: Response) => {
-    res.send("Get Current User Profile route");
+router.get('/me', authUser, async (req: Request, res: Response) => {
+    try {
+        const apiRes = await User.findOne({ where: { id: req.user?.id } });
+        const { password, auth_type_id, updated_at, ...userResponse } = apiRes?.toJSON() || {};
+        res.status(200).json({
+            success: true,
+            message: 'User fetched successfully',
+            data: userResponse
+        });  
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch user',
+            data: error
+        })
+    }
 });
 
 export default router;

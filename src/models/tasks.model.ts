@@ -18,6 +18,7 @@ const Task = sequelize.define('Task', {
     status_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 1,
         references: {
             model: 'statuses',
             key: 'id',  

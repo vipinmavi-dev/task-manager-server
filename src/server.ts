@@ -1,9 +1,9 @@
 import dotenv from 'dotenv';
-
 dotenv.config({
   path: `.env.${process.env.NODE_ENV || 'development'}`,
 });
 
+import {ip} from 'address';
 import express from 'express';
 const app = express();
 import cors from 'cors';
@@ -33,10 +33,11 @@ app.use(cors({
 }))
 app.use(cookieParser());
 app.use(express.json()); // If Request body contain JSON data then parse
-app.use('/api/tasks', taskRoutes);
+app.use('/api', taskRoutes);
 app.use('/api/auth', authRoutes);
 
 const PORT = process.env.PORT || 1010;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}: ${process.env.NODE_ENV+"/"+process.env.DB_NAME || 'NA'}`);
+  let ipAddress = ip();
+  console.log(`✅ Server is running at: http://localhost:${PORT} & http://${ipAddress}:${PORT}`);
 });
