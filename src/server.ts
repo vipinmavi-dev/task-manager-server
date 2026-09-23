@@ -12,6 +12,7 @@ import taskRoutes from './routes/task.routes.js';
 import authRoutes from './routes/auth.routes.js';
 
 import sequelize from './configs/sequalize.js';
+import './models/associations.js';
 import Task from './models/tasks.model.js';
 import User from './models/Users.model.js';
 import AuthType from './models/AuthTypes.model.js';

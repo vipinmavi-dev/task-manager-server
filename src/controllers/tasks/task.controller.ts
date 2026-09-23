@@ -1,13 +1,56 @@
 import { type Request, type Response } from "express";
 import Task from "../../models/tasks.model.js";
-
+import { Sequelize } from 'sequelize';
+import TaskStatus from "../../models/taskStatus.model.js";
+import TaskPriority from "../../models/taskPriority.model.js";
 async function fatchTasksController(req: Request, res: Response) {
     try {
-        const taskList = await Task.findAll();
+        const taskList = await Task.findAll({
+            attributes: [
+                'id',
+                'name',
+                'description',
+                [
+                    Sequelize.fn(
+                        'DATE',
+                        Sequelize.col('Task.created_at')
+                    ),
+                    'created_at'
+                ],
+                [
+                    Sequelize.fn(
+                        'DATE',
+                        Sequelize.col('Task.updated_at')
+                    ),
+                    'updated_at'
+                ],
+            ],
+            include: [
+                {
+                    model: TaskStatus,
+                    as: 'status',
+                    attributes: ['name']
+                },
+                {
+                    model: TaskPriority,
+                    as: 'priority',
+                    attributes: ['name']
+                }
+            ]
+        });
+        const tasks = taskList.map(task => {
+            const taskData = task.toJSON();
+        
+            return {
+                ...taskData,
+                status: taskData.status?.name,
+                priority: taskData.priority?.name
+            };
+        });
         res.status(200).json({
             success: true,
             message: 'Tasks fetched successfully',
-            data: taskList
+            data: tasks
         });
     } catch (error) {
         res.status(500).json({

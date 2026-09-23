@@ -11,7 +11,7 @@ const Task = sequelize.define('Task', {
         type: DataTypes.STRING(100),
         allowNull: false,
     },
-    descriptin: {
+    description: {
         type: DataTypes.STRING(250),
         allowNull: true,
     },
@@ -43,7 +43,8 @@ const Task = sequelize.define('Task', {
 },{
     tableName: 'tasks',
     timestamps: true,
-    createdAt: 'created_at'
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
 })
 
 export default Task;
