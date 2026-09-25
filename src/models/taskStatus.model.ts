@@ -13,8 +13,7 @@ const Status = sequelize.define('status',{
     }
 },{
     tableName: 'statuses',
-    timestamps: true,
-    createdAt: 'created_at'
+    timestamps: false,
 })
 
 export default Status;
