@@ -38,6 +38,8 @@ router.post('/login', async (req: Request, res: Response) => {
         httpOnly: true,
         secure: true,
         sameSite: 'none',
+        path: '/',             // Explicitly set
+        maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.status(200).json({
