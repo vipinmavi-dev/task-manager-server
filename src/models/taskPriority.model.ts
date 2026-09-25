@@ -13,7 +13,7 @@ const Priority = sequelize.define('priority',{
     }
 },{
     tableName: 'prioritys',
-    timestamps: true,
+    timestamps: false,
 })
 
 export default Priority;
