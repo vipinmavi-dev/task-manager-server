@@ -46,18 +46,9 @@ router.post('/login', async (req: Request, res: Response) => {
         data: user
     });
 });
+
 router.post('/logout', (req: Request, res: Response) => {
-    const token = req.cookies.token;
-    console.log(token);
-    if(!token){
-        res.status(401).json({
-            success: false,
-            message: 'No token found',
-            data: null
-        });
-    }
     try {
-        jwt.verify(token, process.env.JWT_SECRET as string);
         res.clearCookie('token');
         res.status(200).json({
             success: true,
@@ -71,9 +62,8 @@ router.post('/logout', (req: Request, res: Response) => {
             data: null
         });
     }
-    
-    res.send("Logout route");
 });
+
 router.post('/signup', async (req: Request, res: Response) => {
     const userData: Readonly<{ name: string, email: string, password: string }> = req.body;
 

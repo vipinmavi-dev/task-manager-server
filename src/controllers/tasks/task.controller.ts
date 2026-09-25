@@ -10,6 +10,7 @@ async function fatchTasksController(req: Request, res: Response) {
                 'id',
                 'name',
                 'description',
+                'status_id',
                 [
                     Sequelize.fn(
                         'DATE',
@@ -115,9 +116,26 @@ async function deleteTaskController(req: Request, res: Response) {
         });
     }
 }
+async function getStatusesController(req: Request, res: Response) {
+    try {
+        const statuses = await TaskStatus.findAll();
+        res.status(200).json({
+            success: true,
+            message: 'Statuses fetched successfully',
+            data: statuses
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching statuses',
+            data: error
+        });
+    }
+}
 export {
     fatchTasksController,
     createTaskController,
     updateTaskController,
-    deleteTaskController
+    deleteTaskController,
+    getStatusesController
 }

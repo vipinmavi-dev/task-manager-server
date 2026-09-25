@@ -5,12 +5,15 @@ import {
     fatchTasksController,
     createTaskController,
     updateTaskController,
-    deleteTaskController
+    deleteTaskController,
+    getStatusesController
 } from '../controllers/tasks/task.controller.js';
 
 router.get('/tasks', authUser, fatchTasksController);
 router.post('/tasks', authUser, createTaskController);  
 router.put('/tasks/:id', authUser, updateTaskController);
 router.delete('/tasks/:id', authUser, deleteTaskController);
+
+router.get('/status', authUser, getStatusesController);
 
 export default router;
