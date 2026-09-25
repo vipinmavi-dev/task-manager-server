@@ -38,7 +38,8 @@ router.post('/login', async (req: Request, res: Response) => {
         httpOnly: true,
         secure: true,
         sameSite: 'none',
-        path: '/',             // Explicitly set
+        path: '/',
+        partitioned: true,
         maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
