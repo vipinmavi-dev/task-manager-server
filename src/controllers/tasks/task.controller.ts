@@ -5,6 +5,8 @@ import TaskStatus from "../../models/taskStatus.model.js";
 import TaskPriority from "../../models/taskPriority.model.js";
 async function fatchTasksController(req: Request, res: Response) {
     try {
+        req.user.id;
+        console.log("req.user.id", req.user.id);
         const taskList = await Task.findAll({
             attributes: [
                 'id',
@@ -37,7 +39,8 @@ async function fatchTasksController(req: Request, res: Response) {
                     as: 'priority',
                     attributes: ['name']
                 }
-            ]
+            ],
+            where: { user_id: req.user.id }
         });
         const tasks = taskList.map(task => {
             const taskData = task.toJSON();
