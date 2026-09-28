@@ -10,6 +10,7 @@ import {
 } from '../controllers/tasks/task.controller.js';
 
 router.get('/tasks', authUser, fatchTasksController);
+router.get('/tasks/:id', authUser, fatchTasksController);
 router.post('/tasks', authUser, createTaskController);  
 router.put('/tasks/:id', authUser, updateTaskController);
 router.delete('/tasks/:id', authUser, deleteTaskController);

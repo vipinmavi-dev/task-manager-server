@@ -1,12 +1,14 @@
 import { type Request, type Response } from "express";
 import Task from "../../models/tasks.model.js";
-import { Sequelize } from 'sequelize';
+import { Sequelize, where } from 'sequelize';
 import TaskStatus from "../../models/taskStatus.model.js";
 import TaskPriority from "../../models/taskPriority.model.js";
 async function fatchTasksController(req: Request, res: Response) {
     try {
-        req.user.id;
-        console.log("req.user.id", req.user.id);
+        let whereCondition = {user_id: req.user.id};
+        if(req.params.id) whereCondition={ id: req.params.id, ...whereCondition };
+        
+console.log('whereCondition', whereCondition);
         const taskList = await Task.findAll({
             attributes: [
                 'id',
@@ -40,7 +42,7 @@ async function fatchTasksController(req: Request, res: Response) {
                     attributes: ['name']
                 }
             ],
-            where: { user_id: req.user.id }
+            where: whereCondition
         });
         const tasks = taskList.map(task => {
             const taskData = task.toJSON();
