@@ -5,7 +5,7 @@ import TaskStatus from "../../models/taskStatus.model.js";
 import TaskPriority from "../../models/taskPriority.model.js";
 async function fatchTasksController(req: Request, res: Response) {
     try {
-        let whereCondition = {user_id: req.user.id};
+        let whereCondition:any = {user_id: req.user.id};
         if(req.params.id) whereCondition={ id: req.params.id, ...whereCondition };
         
 console.log('whereCondition', whereCondition);
