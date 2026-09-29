@@ -8,7 +8,6 @@ async function fatchTasksController(req: Request, res: Response) {
         let whereCondition:any = {user_id: req.user.id};
         if(req.params.id) whereCondition={ id: req.params.id, ...whereCondition };
         
-console.log('whereCondition', whereCondition);
         const taskList = await Task.findAll({
             attributes: [
                 'id',
@@ -137,10 +136,27 @@ async function getStatusesController(req: Request, res: Response) {
         });
     }
 }
+async function getPriorityController(req: Request, res: Response) {
+    try {
+        const statuses = await TaskPriority.findAll();
+        res.status(200).json({
+            success: true,
+            message: 'Priorityes fetched successfully',
+            data: statuses
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching Priorityes',
+            data: error
+        });
+    }
+}
 export {
     fatchTasksController,
     createTaskController,
     updateTaskController,
     deleteTaskController,
-    getStatusesController
+    getStatusesController,
+    getPriorityController
 }
