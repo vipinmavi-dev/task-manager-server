@@ -43,6 +43,73 @@ async function fatchTasksController(req: Request, res: Response) {
             ],
             where: whereCondition
         });
+        const taskCounts = await Task.findOne({
+            attributes: [
+                [Sequelize.fn('COUNT', Sequelize.col('Task.id')), 'total'],
+        
+                [
+                    Sequelize.fn(
+                        'SUM',
+                        Sequelize.literal(
+                            "CASE WHEN status.name = 'todo' THEN 1 ELSE 0 END"
+                        )
+                    ),
+                    'todo'
+                ],
+        
+                [
+                    Sequelize.fn(
+                        'SUM',
+                        Sequelize.literal(
+                            "CASE WHEN status.name = 'in_progress' THEN 1 ELSE 0 END"
+                        )
+                    ),
+                    'in_progress'
+                ],
+        
+                [
+                    Sequelize.fn(
+                        'SUM',
+                        Sequelize.literal(
+                            "CASE WHEN status.name = 'completed' THEN 1 ELSE 0 END"
+                        )
+                    ),
+                    'completed'
+                ],
+        
+                [
+                    Sequelize.fn(
+                        'SUM',
+                        Sequelize.literal(
+                            "CASE WHEN status.name = 'delayed' THEN 1 ELSE 0 END"
+                        )
+                    ),
+                    'delayed'
+                ],
+        
+                [
+                    Sequelize.fn(
+                        'SUM',
+                        Sequelize.literal(
+                            "CASE WHEN status.name = 'cancelled' THEN 1 ELSE 0 END"
+                        )
+                    ),
+                    'cancelled'
+                ]
+            ],
+        
+            include: [
+                {
+                    model: TaskStatus,
+                    as: 'status',
+                    attributes: []
+                }
+            ],
+        
+            where: whereCondition,
+        
+            raw: true
+        });
         const tasks = taskList.map(task => {
             const taskData = task.toJSON();
         
@@ -55,7 +122,7 @@ async function fatchTasksController(req: Request, res: Response) {
         res.status(200).json({
             success: true,
             message: 'Tasks fetched successfully',
-            data: tasks
+            data: { tasks:tasks, counts: taskCounts }
         });
     } catch (error) {
         res.status(500).json({
