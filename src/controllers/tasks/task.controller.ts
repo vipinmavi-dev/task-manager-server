@@ -41,7 +41,10 @@ async function fatchTasksController(req: Request, res: Response) {
                     attributes: ['name']
                 }
             ],
-            where: whereCondition
+            where: whereCondition,
+            order: [
+                ['created_at', 'DESC']
+            ]
         });
         const taskCounts = await Task.findOne({
             attributes: [
