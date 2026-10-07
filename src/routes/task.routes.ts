@@ -6,17 +6,12 @@ import {
     createTaskController,
     updateTaskController,
     deleteTaskController,
-    getStatusesController,
-    getPriorityController
 } from '../controllers/tasks/task.controller.js';
 
-router.get('/tasks', authUser, fatchTasksController);
-router.get('/tasks/:id', authUser, fatchTasksController);
-router.post('/tasks', authUser, createTaskController);  
-router.put('/tasks/:id', authUser, updateTaskController);
-router.delete('/tasks/:id', authUser, deleteTaskController);
-
-router.get('/status', authUser, getStatusesController);
-router.get('/priority', authUser, getPriorityController);
+router.get('/', authUser, fatchTasksController);
+router.get('/:id', authUser, fatchTasksController);
+router.post('/', authUser, createTaskController);  
+router.put('/:id', authUser, updateTaskController);
+router.delete('/:id', authUser, deleteTaskController);
 
 export default router;

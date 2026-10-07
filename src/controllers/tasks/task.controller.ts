@@ -187,43 +187,9 @@ async function deleteTaskController(req: Request, res: Response) {
         });
     }
 }
-async function getStatusesController(req: Request, res: Response) {
-    try {
-        const statuses = await TaskStatus.findAll();
-        res.status(200).json({
-            success: true,
-            message: 'Statuses fetched successfully',
-            data: statuses
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Error fetching statuses',
-            data: error
-        });
-    }
-}
-async function getPriorityController(req: Request, res: Response) {
-    try {
-        const statuses = await TaskPriority.findAll();
-        res.status(200).json({
-            success: true,
-            message: 'Priorityes fetched successfully',
-            data: statuses
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Error fetching Priorityes',
-            data: error
-        });
-    }
-}
 export {
     fatchTasksController,
     createTaskController,
     updateTaskController,
     deleteTaskController,
-    getStatusesController,
-    getPriorityController
 }

@@ -11,6 +11,7 @@ import cookieParser from 'cookie-parser';
 
 import taskRoutes from './routes/task.routes.js';
 import authRoutes from './routes/auth.routes.js';
+import helperRoutes from './routes/helper.routes.js';
 
 import sequelize from './configs/sequalize.js';
 import './models/associations.js';
@@ -35,8 +36,9 @@ app.use(cors({
 }))
 app.use(cookieParser());
 app.use(express.json()); // If Request body contain JSON data then parse
-app.use('/api', taskRoutes);
+app.use('/api/tasks', taskRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/helper', helperRoutes)
 
 const PORT = process.env.PORT || 1010;
 app.listen(PORT, () => {
