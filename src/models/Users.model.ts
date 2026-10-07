@@ -1,7 +1,21 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, Model } from 'sequelize';
 import sequelize from '../configs/sequalize.js';
+interface UserAttributes {
+  id: number;
+  name: string;
+  email: string;
+  phone: string | null;
+  password: string;
+  photo: string | null;
+  last_active_at: Date | null;
+  auth_type_id: number;
+}
 
-const User = sequelize.define('User', {
+interface UserCreationAttributes
+  extends Omit<UserAttributes, 'id'> {}
+  const User = sequelize.define<
+  Model<UserAttributes, UserCreationAttributes>
+>('User', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
