@@ -40,8 +40,12 @@ export async function changePassword(req: Request, res: Response) {
     try {
         const user_id = req.user?.id;
         const { oldPassword, newPassword } = req.body;
-        const UserFromDb = await User.findByPk(user_id);
-        const oldHashedPassword = UserFromDb?.password;
+        const UserFromDb = await User.findOne({
+            where: {
+                id: user_id
+            }
+        });
+        const oldHashedPassword: string = UserFromDb?.getDataValue('password') as string;
         const newHashedPassword = await bcrypt.hash(newPassword, 13);
         const isPasswordCorrect = await bcrypt.compare(oldPassword, oldHashedPassword);
         if(!isPasswordCorrect){
