@@ -21,15 +21,8 @@ router.post("/login", async (req: Request, res: Response) => {
     });
   }
 
-  const {
-    created_at,
-    updated_at,
-    password,
-    auth_type_id,
-    id,
-    last_active_at,
-    ...user
-  } = resFindOne.toJSON();
+  const { created_at, updated_at, password, id, last_active_at, ...user } =
+    resFindOne.toJSON();
   // Check if password matches
   const userCheck: boolean = await bcrypt.compare(
     userCredential.password,
